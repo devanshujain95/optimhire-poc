@@ -140,9 +140,9 @@
             <div class="question-content">
               <h3>Have you worked on React Native applications that interact with WebViews or dynamic websites?</h3>
               <p>
-                Yes. This POC is built around a live React Native WebView that loads a real job application page, scans the DOM, detects
+                Yes. I've previously worked on RN mobile applications that has to interact with WebViews.This POC is built around a live React Native WebView that loads a real job application page, scans the DOM, detects
                 form fields, sends structured events back to the app, and injects controlled JavaScript commands for scan, autofill, reset,
-                and review flows.
+                and review flows. react-native-webview allow us to inject JavaScripts to interact with DOM elements.
               </p>
             </div>
           </article>
@@ -164,7 +164,7 @@
             <div class="question-content">
               <h3>Have you built browser automation, form automation, or autofill solutions?</h3>
               <p>
-                Yes. The demo focuses exactly on this: dynamic DOM parsing, input classification, profile matching, safe value insertion,
+                Yes. I've previously worked on browser automation Puppeteer. Also the demo focuses exactly on this: dynamic DOM parsing, input classification, profile matching, safe value insertion,
                 skipped/manual field states, and a user-controlled final submission step instead of blind automation.
               </p>
             </div>
@@ -176,9 +176,9 @@
               <h3>What parts of a Chrome Extension can realistically be reused in a React Native application?</h3>
               <p class="line-highlight">
                 <strong>
-                  Reuse the platform-agnostic TypeScript core: field mapping, JSON structures, question-answer matching, API integrations,
-                  validation helpers, and site rules. Rewrite the browser-specific layer: content-script lifecycle, extension messaging,
-                  storage, permissions, DOM execution timing, file upload handling, and WebView-specific fallbacks.
+                  We can reuse the TS/JS core like field mapping, JSON structures, question-answer matching, API integrations,
+                  validation helpers, and site rules. And rewrite the browser-specific layer like script lifecycle, extension messaging,
+                  storage, permissions, DOM execution.
                 </strong>
               </p>
             </div>
@@ -226,8 +226,8 @@
             <h3>Reuse directly</h3>
             <ul>
               <li>TypeScript utility functions</li>
-              <li>Business rules and job-board metadata</li>
-              <li>Field mapping and question-answer matching</li>
+              <li>Business rules and job board metadata</li>
+              <li>Field mapping and question/answers matching</li>
               <li>Existing JSON structures and backend API clients</li>
               <li>Validation helpers and normalized automation outputs</li>
             </ul>
@@ -237,10 +237,9 @@
             <h3>Adapt for mobile</h3>
             <ul>
               <li>DOM parsing timing inside React Native WebView</li>
-              <li>Bridge messaging between page JavaScript and app state</li>
-              <li>Resume upload and native file permissions</li>
+              <li>Bridge messaging between page JS/TS & app state</li>
+              <li>Resume upload and native permissions</li>
               <li>Manual fallback states for unsupported fields</li>
-              <li>Android and iOS differences in WebView behavior</li>
             </ul>
           </article>
         </div>
@@ -260,7 +259,7 @@
             <span class="capability-number">01</span>
             <div>
               <h3>React Native WebView integration</h3>
-              <p>Loads real job application pages and uses a controlled JavaScript bridge for scan and autofill commands.</p>
+              <p>Loads real job application pages and uses a controlled TS bridge for scan and autofill commands.</p>
             </div>
           </article>
           <article class="capability-card">
@@ -281,7 +280,7 @@
             <span class="capability-number">04</span>
             <div>
               <h3>Safe automation architecture</h3>
-              <p>Prepares applications for user review, avoids blind final submission, and leaves room for site-specific adapters.</p>
+              <p>Prepares applications for user review, avoids blind final submission, and leaves room for site specific adapters.</p>
             </div>
           </article>
         </div>
@@ -296,11 +295,11 @@
         <ol class="timeline-list">
           <li>
             <strong>Audit the Plasmo Chrome Extension</strong>
-            <span>Review the 22-site extension, separate reusable TypeScript logic from browser-only APIs, and document mobile limitations.</span>
+            <span>Review the already created extension, separate reusable JS/TS logic from browser-only APIs, and document mobile limitations.</span>
           </li>
           <li>
             <strong>Create a shared automation core</strong>
-            <span>Move field mapping, question matching, JSON models, API clients, and site rules into a mobile-safe shared package.</span>
+            <span>Move field mapping, question matching, JSON models, API clients, and site rules into a mobile safe shared package.</span>
           </li>
           <li>
             <strong>Build the React Native WebView layer</strong>

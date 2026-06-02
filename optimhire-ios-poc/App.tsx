@@ -58,7 +58,7 @@ type WebMessage =
   | { type: 'FORM_RESET'; detected: number }
   | { type: 'SCROLL_STATE'; scrollY: number; direction: ScrollDirection; isNearTop: boolean };
 
-type Command = 'scan' | 'preflightAutofill' | 'autofill' | 'resetForm';
+type Command = 'scan' | 'preflightAutofill' | 'autofill' | 'resetForm' | 'focusField';
 
 type Profile = {
   name: string;
@@ -422,6 +422,10 @@ export default function App() {
     webViewRef.current?.injectJavaScript(liveLeverAutomationScript(command, profile, fieldAnswers));
   };
 
+  const focusWebViewField = (fieldId: string) => {
+    webViewRef.current?.injectJavaScript(liveLeverAutomationScript('focusField', profile, fieldAnswers, fieldId));
+  };
+
   const startAutofillFlow = () => {
     setStatus('Checking form requirements before autofill...');
     setDiagnostic('Scanning the form before filling anything.');
@@ -619,8 +623,12 @@ export default function App() {
         setPendingAutofill(false);
         setAssistantVisible(false);
         setAssistantRequirements([]);
-        setStatus('Form filled');
-        setDiagnostic('Review and submit the form. Final submit was not clicked by the POC.');
+        setStatus(message.manual > 0 ? 'Review red fields manually' : 'Form filled');
+        setDiagnostic(
+          message.manual > 0
+            ? `${message.manual} field${message.manual === 1 ? '' : 's'} need manual input in the WebView.`
+            : 'Review and submit the form. Final submit was not clicked by the POC.',
+        );
         setStats({
           detected: message.detected,
           filled: message.filled,
@@ -634,7 +642,7 @@ export default function App() {
         setDiagnostic('The page stayed in place and form fields were cleared.');
         setReviewReady(false);
         setFields([]);
-        setStats((value) => ({ ...value, detected: message.detected, filled: 0, skipped: 0 }));
+        setStats((value) => ({ ...value, detected: message.detected, filled: 0, manual: 0, skipped: 0 }));
         return;
       }
 
@@ -692,6 +700,7 @@ export default function App() {
             onScan={() => runCommand('scan')}
             onAutofill={startAutofillFlow}
             onReset={resetDemo}
+            onFocusField={focusWebViewField}
             onMessage={handleWebMessage}
             onLoad={(url) => {
               setStatus('Live page loaded');
@@ -846,6 +855,7 @@ function LiveApplyScreen({
   onScan,
   onAutofill,
   onReset,
+  onFocusField,
   onMessage,
   onLoad,
   onError,
@@ -873,6 +883,7 @@ function LiveApplyScreen({
   onScan: () => void;
   onAutofill: () => void;
   onReset: () => void;
+  onFocusField: (fieldId: string) => void;
   onMessage: (event: WebViewMessageEvent) => void;
   onLoad: (url?: string) => void;
   onError: (message: string) => void;
@@ -1132,7 +1143,7 @@ function AutofillAssistantSheet({
   );
 }
 
-function FieldPill({ field }: { field: FormField }) {
+function FieldPill({ field, onFocus }: { field: FormField; onFocus?: (fieldId: string) => void }) {
   const statusStyle =
     field.status === 'success'
       ? styles.fieldPillSuccess
@@ -1142,11 +1153,25 @@ function FieldPill({ field }: { field: FormField }) {
           ? styles.fieldPillSkipped
           : styles.fieldPillPending;
   const detail = field.mappedValue || field.reason || field.type;
+  const canFocus = Boolean(onFocus && (field.status === 'manual' || field.status === 'skipped'));
+  const content = (
+    <>
+      <Text style={styles.fieldPillLabel} numberOfLines={1}>{field.label || field.id}</Text>
+      <Text style={styles.fieldPillMeta} numberOfLines={1}>{field.status} · {detail}</Text>
+    </>
+  );
+
+  if (canFocus) {
+    return (
+      <Pressable accessibilityRole="button" accessibilityLabel={`Focus ${field.label || field.id}`} style={[styles.fieldPill, statusStyle]} onPress={() => onFocus?.(field.id)}>
+        {content}
+      </Pressable>
+    );
+  }
 
   return (
     <View style={[styles.fieldPill, statusStyle]}>
-      <Text style={styles.fieldPillLabel} numberOfLines={1}>{field.label || field.id}</Text>
-      <Text style={styles.fieldPillMeta} numberOfLines={1}>{field.status} · {detail}</Text>
+      {content}
     </View>
   );
 }
@@ -1230,6 +1255,7 @@ function webViewBootstrapScript() {
         send({ type: 'FIELD_DETECTED', fields });
         fileInputs.forEach((element, index) => {
           const container = element.closest('li, label, .application-question');
+          markManualField(element, 'Attach resume');
           send({
             type: 'MANUAL_REQUIRED',
             id: element.id || element.name || 'resume-file-' + index,
@@ -1281,12 +1307,13 @@ function webViewBootstrapScript() {
   `;
 }
 
-function liveLeverAutomationScript(command: Command, profile: Profile, fieldAnswers: FieldAnswers = {}) {
+function liveLeverAutomationScript(command: Command, profile: Profile, fieldAnswers: FieldAnswers = {}, focusFieldId?: string) {
   const payload = JSON.stringify({
     command,
     job: liveJob,
     profile,
     fieldAnswers,
+    focusFieldId,
   });
 
   return `
@@ -1444,53 +1471,60 @@ function liveLeverAutomationScript(command: Command, profile: Profile, fieldAnsw
         dispatchInputChange(element);
         element.dispatchEvent(new Event('blur', { bubbles: true }));
       };
+      const fieldChromeFor = (element) => element.closest('.application-field') || element;
+      const clearOptimHireMarks = () => {
+        document.querySelectorAll('[data-optimhire-marked="true"]').forEach((element) => {
+          element.style.outline = '';
+          element.style.backgroundColor = '';
+          element.style.borderColor = '';
+        });
+        document.querySelectorAll('[data-optimhire-note="true"]').forEach((element) => element.remove());
+      };
+      const markManualField = (element, reason) => {
+        const chrome = fieldChromeFor(element);
+        const target = visible(element) ? element : chrome;
+        target.dataset.optimhireMarked = 'true';
+        target.style.outline = '2px solid #D93A3A';
+        target.style.borderColor = '#D93A3A';
+      };
+      const markFilledField = (element) => {
+        const chrome = fieldChromeFor(element);
+        [element, chrome].forEach((target) => {
+          target.style.outline = '';
+          target.style.backgroundColor = '';
+          target.style.borderColor = '';
+        });
+      };
       const isLocationInput = (element) => (
         element.id === 'location-input' ||
         element.name === 'location' ||
         (element.classList && element.classList.contains('location-input')) ||
         element.getAttribute('data-qa') === 'location-input'
       );
-      const selectLeverLocation = async (element, value) => {
+      const prepareManualLocationField = (element, value) => {
         element.focus();
-        element.value = value;
-        dispatchInputChange(element);
-
-        const normalizedValue = clean(value).toLowerCase();
-        const tokens = normalizedValue.split(/[\\s,]+/).filter(Boolean);
-        let selectedOption = null;
-
-        for (let attempt = 0; attempt < 15; attempt += 1) {
-          const options = Array.from(document.querySelectorAll('.dropdown-location'));
-          if (options.length > 0) {
-            selectedOption =
-              options.find((option) => {
-                const text = clean(option.textContent).toLowerCase();
-                return normalizedValue.includes(text) || text.includes(normalizedValue) || tokens.some((token) => text.includes(token));
-              }) || options[0];
-            break;
-          }
-          await sleep(100);
-        }
-
-        const selectedLocation = document.querySelector('#selected-location');
-        if (selectedOption) {
-          selectedOption.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true, view: window }));
-          if (selectedLocation && !selectedLocation.value) {
-            selectedLocation.value = JSON.stringify({ name: clean(selectedOption.textContent) || value });
-          }
-        } else {
+        if (value) {
           element.value = value;
-          if (selectedLocation) {
-            selectedLocation.value = JSON.stringify({ name: value });
-          }
+          dispatchInputChange(element);
         }
-
-        document.querySelectorAll('.dropdown-container').forEach((container) => {
-          container.style.display = 'none';
-        });
-        dispatchInputChange(element);
-
-        return Boolean(clean(element.value));
+        const selectedLocation = document.querySelector('#selected-location');
+        if (selectedLocation) {
+          selectedLocation.value = '';
+        }
+        markManualField(element, 'Choose from dropdown');
+      };
+      const fieldById = (targetId) => {
+        const all = controls();
+        return all.find((element, index) => fieldId(element, index) === targetId);
+      };
+      const focusField = () => {
+        const element = fieldById(payload.focusFieldId);
+        if (!element) return;
+        const chrome = fieldChromeFor(element);
+        chrome.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (element.type !== 'file') {
+          element.focus();
+        }
       };
       const autofill = async () => {
         if (!document.querySelector('#application-form')) {
@@ -1503,8 +1537,10 @@ function liveLeverAutomationScript(command: Command, profile: Profile, fieldAnsw
         let filled = 0;
         let skipped = 0;
         let manual = fileInputs.length;
+        clearOptimHireMarks();
         send({ type: 'FIELD_DETECTED', fields });
         fileInputs.forEach((element, index) => {
+          markManualField(element, 'Attach resume');
           send({
             type: 'MANUAL_REQUIRED',
             id: element.id || element.name || 'resume-file-' + index,
@@ -1519,36 +1555,38 @@ function liveLeverAutomationScript(command: Command, profile: Profile, fieldAnsw
           const info = infoFor(element, index);
           const value = fieldValue(info);
           if (!value) {
-            skipped += 1;
-            send({ type: 'FIELD_SKIPPED', id: info.id, label: info.label || info.id, fieldType: info.type, required: info.required, reason: 'No confident mapping' });
+            manual += 1;
+            markManualField(element, 'No confident mapping');
+            send({ type: 'MANUAL_REQUIRED', id: info.id, label: info.label || info.id, fieldType: info.type, required: info.required, reason: 'No confident mapping' });
             continue;
           }
           if (isLocationInput(element)) {
-            const locationFilled = await selectLeverLocation(element, value);
-            if (!locationFilled) {
-              skipped += 1;
-              send({ type: 'FIELD_SKIPPED', id: info.id, label: info.label || info.id, fieldType: info.type, required: info.required, reason: 'Location autocomplete not resolved' });
-              continue;
-            }
+            prepareManualLocationField(element, value);
+            manual += 1;
+            send({ type: 'MANUAL_REQUIRED', id: info.id, label: info.label || info.id, fieldType: info.type, required: info.required, reason: 'Choose from dropdown' });
+            continue;
           } else if (element.tagName.toLowerCase() === 'select') {
             const match = Array.from(element.options).find((option) => optionMatches(option, value));
             if (!match) {
-              skipped += 1;
-              send({ type: 'FIELD_SKIPPED', id: info.id, label: info.label || info.id, fieldType: info.type, required: info.required, reason: 'No matching option' });
+              manual += 1;
+              markManualField(element, 'No matching option');
+              send({ type: 'MANUAL_REQUIRED', id: info.id, label: info.label || info.id, fieldType: info.type, required: info.required, reason: 'No matching option' });
               continue;
             }
             element.value = match.value;
           } else if (element.type === 'checkbox') {
             if (!chooseRadioOrCheckbox(element, info, value)) {
-              skipped += 1;
-              send({ type: 'FIELD_SKIPPED', id: info.id, label: info.label || info.id, fieldType: info.type, required: info.required, reason: 'Unsafe checkbox' });
+              manual += 1;
+              markManualField(element, 'Unsafe checkbox');
+              send({ type: 'MANUAL_REQUIRED', id: info.id, label: info.label || info.id, fieldType: info.type, required: info.required, reason: 'Unsafe checkbox' });
               continue;
             }
             element.checked = true;
           } else if (element.type === 'radio') {
             if (!chooseRadioOrCheckbox(element, info, value)) {
-              skipped += 1;
-              send({ type: 'FIELD_SKIPPED', id: info.id, label: info.label || info.id, fieldType: info.type, required: info.required, reason: 'Unsafe radio option' });
+              manual += 1;
+              markManualField(element, 'Unsafe radio option');
+              send({ type: 'MANUAL_REQUIRED', id: info.id, label: info.label || info.id, fieldType: info.type, required: info.required, reason: 'Unsafe radio option' });
               continue;
             }
             element.checked = true;
@@ -1557,8 +1595,9 @@ function liveLeverAutomationScript(command: Command, profile: Profile, fieldAnsw
           } else if (element.type === 'number') {
             const numericValue = value.match(/\\d+/)?.[0];
             if (!numericValue) {
-              skipped += 1;
-              send({ type: 'FIELD_SKIPPED', id: info.id, label: info.label || info.id, fieldType: info.type, required: info.required, reason: 'No numeric mapping' });
+              manual += 1;
+              markManualField(element, 'No numeric mapping');
+              send({ type: 'MANUAL_REQUIRED', id: info.id, label: info.label || info.id, fieldType: info.type, required: info.required, reason: 'No numeric mapping' });
               continue;
             }
             element.value = numericValue;
@@ -1566,13 +1605,14 @@ function liveLeverAutomationScript(command: Command, profile: Profile, fieldAnsw
             element.value = value;
           }
           dispatch(element);
-          element.style.outline = '2px solid #0A6ED4';
-          element.style.backgroundColor = '#F3F8FF';
+          markFilledField(element);
           filled += 1;
           send({ type: 'FIELD_FILLED', id: info.id, label: info.label || info.id, fieldType: info.type, required: info.required, mappedValue: value });
           await sleep(140);
         }
-        document.querySelector('#btn-submit, button[type="submit"], input[type="submit"]')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        if (manual === 0) {
+          document.querySelector('#btn-submit, button[type="submit"], input[type="submit"]')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
         send({ type: 'READY_FOR_REVIEW', detected: fields.length + fileInputs.length, filled, skipped, manual });
       };
       const resetForm = () => {
@@ -1580,6 +1620,7 @@ function liveLeverAutomationScript(command: Command, profile: Profile, fieldAnsw
         if (form && typeof form.reset === 'function') {
           form.reset();
         }
+        clearOptimHireMarks();
         const selectedLocation = document.querySelector('#selected-location');
         if (selectedLocation) {
           selectedLocation.value = '';
@@ -1606,6 +1647,7 @@ function liveLeverAutomationScript(command: Command, profile: Profile, fieldAnsw
       if (payload.command === 'scan') scan();
       if (payload.command === 'preflightAutofill') openApply();
       if (payload.command === 'autofill') autofill();
+      if (payload.command === 'focusField') focusField();
       if (payload.command === 'resetForm') resetForm();
       true;
     })();
@@ -1850,12 +1892,8 @@ const styles = StyleSheet.create({
   },
   headerBackButton: {
     height: 38,
-    borderRadius: 19,
-    paddingLeft: 10,
-    paddingRight: 12,
-    backgroundColor: colors.soft,
-    borderWidth: 1,
-    borderColor: '#D9E7FA',
+    paddingLeft: 0,
+    paddingRight: 4,
     flexDirection: 'row',
     alignItems: 'center',
     gap: 3,
@@ -1882,9 +1920,9 @@ const styles = StyleSheet.create({
     gap: 7,
   },
   headerMiniLogo: {
-    width: 34,
-    height: 34,
-    borderRadius: 9,
+    width: 26,
+    height: 26,
+    borderRadius: 7,
   },
   headerCopy: {
     flex: 1,
@@ -2197,8 +2235,8 @@ const styles = StyleSheet.create({
     borderColor: '#A7E5C8',
   },
   fieldPillManual: {
-    backgroundColor: colors.warningBg,
-    borderColor: '#F4D59B',
+    backgroundColor: colors.errorBg,
+    borderColor: '#F1B5B5',
   },
   fieldPillSkipped: {
     backgroundColor: colors.errorBg,
