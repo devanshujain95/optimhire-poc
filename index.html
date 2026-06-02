@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>OptimHire Auto-Applier POC</title>
+    <meta
+      name="description"
+      content="OptimHire Auto-Applier POC showcase with synchronized demo recordings, WebView control, DOM field detection, profile mapping, and review handoff."
+    />
+    <link rel="icon" href="assets/favicon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="showcase.css" />
+  </head>
+  <body>
+    <header class="site-header" aria-label="Site header">
+      <a class="brand-lockup" href="#top" aria-label="OptimHire showcase home">
+        <img src="assets/optimhire/icon.png" alt="OptimHire logo" />
+        <span>OptimHire</span>
+      </a>
+      <nav class="header-nav" aria-label="Page sections">
+        <a href="#demo-stage">Demo</a>
+        <a href="#capabilities">Flow</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero-section" aria-labelledby="hero-title">
+        <div class="hero-logo-wrap" aria-hidden="true">
+          <img src="assets/optimhire/logo.svg" alt="" />
+        </div>
+        <div class="hero-content">
+          <p class="eyebrow">OptimHire iOS POC</p>
+          <h1 id="hero-title">OptimHire Auto-Applier POC</h1>
+          <p class="hero-subtitle">
+            A focused mobile proof of concept for controlling a live job-application WebView, detecting form fields, mapping a candidate
+            profile, and handing the final submission back to the user for review.
+          </p>
+          <div class="hero-actions" aria-label="Primary actions">
+            <a class="button button-primary" href="#demo-stage">
+              <span aria-hidden="true">&gt;</span>
+              View recordings
+            </a>
+            <a class="button button-secondary" href="#capabilities">
+              <span aria-hidden="true">+</span>
+              See app flow
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section demo-section" id="demo-stage" aria-labelledby="demo-title">
+        <div class="demo-player">
+          <div class="section-heading">
+            <p class="eyebrow">Demo theater</p>
+            <h2 id="demo-title">Synchronized recordings</h2>
+            <p>
+              The left recording is the mobile product demo. The right recording is the technical walkthrough. Both play from one shared
+              control so the product behavior and implementation notes stay aligned.
+            </p>
+          </div>
+
+          <div class="media-grid" data-paired-videos>
+            <article class="media-panel">
+              <video
+                data-paired-video="left"
+                muted
+                playsinline
+                webkit-playsinline
+                preload="metadata"
+                poster="assets/showcase/product-demo-poster.svg"
+                aria-label="OptimHire product demo"
+              >
+                <source src="assets/showcase/product-demo.mp4" type="video/mp4" />
+              </video>
+              <div class="media-fallback" data-video-fallback="left" aria-hidden="true">
+                <img src="assets/optimhire/logo.svg" alt="" />
+                <strong>Product demo recording</strong>
+                <span>Drop in assets/showcase/product-demo.mp4</span>
+              </div>
+            </article>
+
+            <article class="media-panel">
+              <video
+                data-paired-video="right"
+                playsinline
+                webkit-playsinline
+                preload="metadata"
+                poster="assets/showcase/technical-walkthrough-poster.svg"
+                aria-label="OptimHire technical walkthrough"
+              >
+                <source src="assets/showcase/technical-walkthrough.mp4" type="video/mp4" />
+              </video>
+              <div class="media-fallback media-fallback-alt" data-video-fallback="right" aria-hidden="true">
+                <img src="assets/optimhire/AI-icon.png" alt="" />
+                <strong>Technical walkthrough</strong>
+                <span>Drop in assets/showcase/technical-walkthrough.mp4</span>
+              </div>
+            </article>
+          </div>
+
+          <button class="button button-primary media-sync-button" type="button" data-video-toggle>
+            <span aria-hidden="true">&gt;</span>
+            Play recordings
+          </button>
+          <input
+            class="media-progress"
+            data-video-progress
+            type="range"
+            min="0"
+            max="100"
+            value="0"
+            step="0.1"
+            aria-label="Recording progress"
+          />
+        </div>
+      </section>
+
+      <section class="section capabilities-section" id="capabilities" aria-labelledby="capabilities-title">
+        <div class="section-heading">
+          <p class="eyebrow">POC flow</p>
+          <h2 id="capabilities-title">What the demo proves</h2>
+          <p>
+            The page stays intentionally lightweight: it highlights only the core proof points from the OptimHire mobile prototype.
+          </p>
+        </div>
+
+        <div class="capability-grid" aria-label="OptimHire POC capabilities">
+          <article class="capability-card">
+            <span class="capability-number">01</span>
+            <div>
+              <h3>Live iOS WebView control</h3>
+              <p>The app loads a real job posting and controls the application journey inside a native mobile WebView.</p>
+            </div>
+          </article>
+          <article class="capability-card">
+            <span class="capability-number">02</span>
+            <div>
+              <h3>Dynamic DOM field detection</h3>
+              <p>Form inputs are scanned from the page instead of relying on a fixed ATS-specific template.</p>
+            </div>
+          </article>
+          <article class="capability-card">
+            <span class="capability-number">03</span>
+            <div>
+              <h3>Profile-to-field mapping</h3>
+              <p>Candidate profile values are mapped into recognized form fields with skipped/manual states kept visible.</p>
+            </div>
+          </article>
+          <article class="capability-card">
+            <span class="capability-number">04</span>
+            <div>
+              <h3>Safe review handoff</h3>
+              <p>The user stays in control before final submission, with the app preparing the form for review instead of blindly applying.</p>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section contact-section" id="contact" aria-labelledby="contact-title">
+        <div class="section-heading">
+          <p class="eyebrow">Contact</p>
+          <h2 id="contact-title">Connect with me</h2>
+          <p>Please let me know a good time to discuss the OptimHire POC, next production steps, and handoff details.</p>
+        </div>
+
+        <div class="contact-card">
+          <a href="mailto:devanshujain95@gmail.com">
+            <strong>Email</strong>
+            <span>devanshujain95@gmail.com</span>
+          </a>
+          <a href="https://github.com/devanshujain95" target="_blank" rel="noreferrer">
+            <strong>GitHub</strong>
+            <span>github.com/devanshujain95</span>
+          </a>
+          <a href="https://x.com/devanshujain_" target="_blank" rel="noreferrer">
+            <strong>X</strong>
+            <span>x.com/devanshujain_</span>
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <img src="assets/optimhire/icon.png" alt="OptimHire logo" />
+      <div>
+        <strong>OptimHire Auto-Applier POC</strong>
+        <span>Product demo, technical walkthrough, and mobile automation proof points.</span>
+      </div>
+    </footer>
+
+    <script src="showcase.js"></script>
+  </body>
+</html>

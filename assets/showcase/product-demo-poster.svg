@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="720" height="1280" viewBox="0 0 720 1280" role="img" aria-labelledby="title desc">
+  <title id="title">OptimHire product demo poster</title>
+  <desc id="desc">Placeholder poster for the OptimHire product demo recording.</desc>
+  <rect width="720" height="1280" fill="#f1f6ff"/>
+  <path d="M0 0h720v1280H0z" fill="url(#grid)"/>
+  <rect x="64" y="92" width="592" height="1100" rx="48" fill="#ffffff" stroke="#252a37" stroke-width="8"/>
+  <rect x="108" y="152" width="504" height="88" rx="24" fill="#0a6ed4"/>
+  <circle cx="164" cy="196" r="20" fill="#ffffff"/>
+  <rect x="196" y="178" width="242" height="18" rx="9" fill="#ffffff" opacity=".86"/>
+  <rect x="196" y="205" width="154" height="14" rx="7" fill="#ffffff" opacity=".56"/>
+  <rect x="108" y="304" width="504" height="156" rx="24" fill="#f6f8fb" stroke="#d8dde0" stroke-width="4"/>
+  <rect x="108" y="492" width="504" height="156" rx="24" fill="#f6f8fb" stroke="#d8dde0" stroke-width="4"/>
+  <rect x="108" y="680" width="504" height="156" rx="24" fill="#f6f8fb" stroke="#d8dde0" stroke-width="4"/>
+  <rect x="108" y="916" width="504" height="78" rx="28" fill="#0a6ed4" stroke="#252a37" stroke-width="5"/>
+  <text x="360" y="1070" text-anchor="middle" font-family="Lexend, Arial, sans-serif" font-size="48" font-weight="900" fill="#252a37">Product demo</text>
+  <text x="360" y="1122" text-anchor="middle" font-family="Lexend, Arial, sans-serif" font-size="24" font-weight="700" fill="#747b8a">assets/showcase/product-demo.mp4</text>
+  <defs>
+    <pattern id="grid" width="44" height="44" patternUnits="userSpaceOnUse">
+      <path d="M44 0H0v44" fill="none" stroke="#0a6ed4" stroke-width="1" opacity=".1"/>
+    </pattern>
+  </defs>
+</svg>

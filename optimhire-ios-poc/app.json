@@ -1,0 +1,22 @@
+{
+  "expo": {
+    "name": "OptimHire Auto-Applier POC",
+    "slug": "optimhire-ios-poc",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/optimhire/icon.png",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "bundleIdentifier": "com.devanshujain.optimhireautoapplierpoc",
+      "appleTeamId": "KA93HYPBB3",
+      "supportsTablet": false,
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": []
+  }
+}
