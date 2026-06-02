@@ -1,2 +1,6 @@
 .DS_Store
 .claude/
+
+# Raw local recording sources; compressed Pages-ready MP4s live in assets/showcase/.
+assets/*.mov
+assets/*.MOV
