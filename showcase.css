@@ -23,6 +23,12 @@ html {
   scroll-behavior: smooth;
 }
 
+html,
+body {
+  max-width: 100%;
+  overflow-x: clip;
+}
+
 body {
   margin: 0;
   background: var(--surface);
@@ -52,6 +58,12 @@ video {
 
 a {
   color: inherit;
+}
+
+button,
+input,
+a {
+  max-width: 100%;
 }
 
 .site-header {
@@ -149,6 +161,7 @@ a {
   position: relative;
   z-index: 1;
   width: min(1040px, 100%);
+  min-width: 0;
   text-align: center;
 }
 
@@ -209,6 +222,7 @@ h3 {
 
 .button {
   min-height: 52px;
+  max-width: 100%;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -221,6 +235,7 @@ h3 {
   font-size: 16px;
   font-weight: 900;
   text-decoration: none;
+  text-align: center;
   cursor: pointer;
 }
 
@@ -290,6 +305,7 @@ h3 {
 .media-panel {
   position: relative;
   width: min(360px, 100%);
+  max-width: 100%;
   min-height: min(620px, 68vh);
   display: grid;
   place-items: center;
@@ -339,12 +355,14 @@ h3 {
 .media-fallback strong {
   font-size: 22px;
   font-weight: 900;
+  overflow-wrap: anywhere;
 }
 
 .media-fallback span {
   color: var(--muted);
   font-size: 14px;
   font-weight: 700;
+  overflow-wrap: anywhere;
 }
 
 .media-fallback-alt img {
@@ -467,6 +485,7 @@ h3 {
   margin-top: 8px;
   color: var(--muted);
   font-weight: 700;
+  overflow-wrap: anywhere;
 }
 
 .site-footer {
@@ -503,6 +522,7 @@ h3 {
   margin-top: 4px;
   color: rgba(255, 255, 255, 0.76);
   font-weight: 600;
+  overflow-wrap: anywhere;
 }
 
 @media (max-width: 980px) {
@@ -532,6 +552,10 @@ h3 {
   .contact-card {
     grid-template-columns: 1fr;
   }
+
+  .media-grid {
+    width: min(420px, 100%);
+  }
 }
 
 @media (max-width: 620px) {
@@ -552,15 +576,17 @@ h3 {
 
   .hero-section {
     min-height: auto;
-    padding: 58px 18px 64px;
+    padding: 48px 18px 56px;
   }
 
   h1 {
-    font-size: 42px;
+    font-size: 36px;
+    line-height: 1.08;
   }
 
   h2 {
-    font-size: 32px;
+    font-size: 30px;
+    line-height: 1.08;
   }
 
   h3 {
@@ -573,25 +599,80 @@ h3 {
   }
 
   .demo-player {
-    padding: 18px;
+    padding: 14px;
   }
 
   .media-panel,
   .media-panel video {
-    min-height: min(560px, 78vh);
-    height: min(560px, 78vh);
+    width: 100%;
+    min-height: min(520px, 76vh);
+    height: min(520px, 76vh);
+  }
+
+  .media-fallback {
+    padding: 22px 14px;
+  }
+
+  .media-fallback img {
+    max-width: 120px;
+    max-height: 82px;
+  }
+
+  .media-fallback strong {
+    font-size: 20px;
+  }
+
+  .hero-actions {
+    align-items: stretch;
+    flex-direction: column;
   }
 
   .media-sync-button {
     width: 100%;
   }
 
+  .button {
+    width: 100%;
+    min-height: 50px;
+    padding: 12px 14px;
+  }
+
   .capability-card {
     grid-template-columns: 1fr;
+  }
+
+  .contact-card a {
+    min-height: 112px;
+    padding: 18px;
   }
 
   .site-footer {
     align-items: flex-start;
     flex-direction: column;
+  }
+}
+
+@media (max-width: 360px) {
+  .site-header,
+  .section,
+  .hero-section {
+    padding-left: 14px;
+    padding-right: 14px;
+  }
+
+  .brand-lockup {
+    font-size: 16px;
+  }
+
+  h1 {
+    font-size: 31px;
+  }
+
+  h2 {
+    font-size: 27px;
+  }
+
+  .demo-player {
+    padding: 12px;
   }
 }
