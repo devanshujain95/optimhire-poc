@@ -6,7 +6,7 @@
     <title>OptimHire Auto-Applier POC</title>
     <meta
       name="description"
-      content="OptimHire Auto-Applier POC showcase with synchronized demo recordings, WebView control, DOM field detection, profile mapping, and review handoff."
+      content="OptimHire Job Auto Applier mobile proposal: React Native WebView automation POC, Chrome Extension reuse strategy, technical answers, roadmap, and demo recordings."
     />
     <link rel="icon" href="assets/favicon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -25,7 +25,9 @@
       </a>
       <nav class="header-nav" aria-label="Page sections">
         <a href="#demo-stage">Demo</a>
-        <a href="#capabilities">Flow</a>
+        <a href="#proposal-questions">Answers</a>
+        <a href="#reuse-strategy">Reuse</a>
+        <a href="#roadmap">Roadmap</a>
         <a href="#contact">Contact</a>
       </nav>
     </header>
@@ -36,20 +38,20 @@
           <img src="assets/optimhire/logo.svg" alt="" />
         </div>
         <div class="hero-content">
-          <p class="eyebrow">OptimHire iOS POC</p>
-          <h1 id="hero-title">OptimHire Auto-Applier POC</h1>
+          <p class="eyebrow">React Native mobile automation proposal</p>
+          <h1 id="hero-title">OptimHire Job Auto Applier</h1>
           <p class="hero-subtitle">
-            A focused mobile proof of concept for controlling a live job-application WebView, detecting form fields, mapping a candidate
-            profile, and handing the final submission back to the user for review.
+            A React Native and TypeScript mobile POC for bringing Chrome Extension-style job application automation into Android and iOS
+            with live WebView inspection, dynamic form handling, profile mapping, and safe review before submission.
           </p>
           <div class="hero-actions" aria-label="Primary actions">
             <a class="button button-primary" href="#demo-stage">
               <span aria-hidden="true">&gt;</span>
               View recordings
             </a>
-            <a class="button button-secondary" href="#capabilities">
+            <a class="button button-secondary" href="#proposal-questions">
               <span aria-hidden="true">+</span>
-              See app flow
+              Review answers
             </a>
           </div>
         </div>
@@ -61,8 +63,8 @@
             <p class="eyebrow">Demo theater</p>
             <h2 id="demo-title">Synchronized recordings</h2>
             <p>
-              The left recording is the mobile product demo. The right recording is the technical walkthrough. Both play from one shared
-              control so the product behavior and implementation notes stay aligned.
+              The left recording is the mobile product demo. The right recording is the technical walkthrough. Together they show live
+              WebView scanning, dynamic field detection, profile-to-field mapping, autofill behavior, and the final review handoff.
             </p>
           </div>
 
@@ -122,12 +124,134 @@
         </div>
       </section>
 
+      <section class="section questions-section" id="proposal-questions" aria-labelledby="questions-title">
+        <div class="section-heading">
+          <p class="eyebrow">Proposal screening questions</p>
+          <h2 id="questions-title">Direct answers</h2>
+          <p>
+            The job requires someone who can reason through browser automation, WebView limits, reusable extension logic, and production
+            mobile architecture. These are my direct answers to that scope.
+          </p>
+        </div>
+
+        <div class="question-list">
+          <article class="question-card">
+            <span class="question-number">01</span>
+            <div class="question-content">
+              <h3>Have you worked on React Native applications that interact with WebViews or dynamic websites?</h3>
+              <p>
+                Yes. This POC is built around a live React Native WebView that loads a real job application page, scans the DOM, detects
+                form fields, sends structured events back to the app, and injects controlled JavaScript commands for scan, autofill, reset,
+                and review flows.
+              </p>
+            </div>
+          </article>
+
+          <article class="question-card">
+            <span class="question-number">02</span>
+            <div class="question-content">
+              <h3>Have you previously worked with Chrome Extensions or Plasmo?</h3>
+              <p>
+                I understand the extension-to-mobile migration path: content scripts, site adapters, shared TypeScript utilities, extension
+                storage, API calls, field maps, and per-site rules need to be separated from browser-only APIs before being reused in React
+                Native.
+              </p>
+            </div>
+          </article>
+
+          <article class="question-card">
+            <span class="question-number">03</span>
+            <div class="question-content">
+              <h3>Have you built browser automation, form automation, or autofill solutions?</h3>
+              <p>
+                Yes. The demo focuses exactly on this: dynamic DOM parsing, input classification, profile matching, safe value insertion,
+                skipped/manual field states, and a user-controlled final submission step instead of blind automation.
+              </p>
+            </div>
+          </article>
+
+          <article class="question-card">
+            <span class="question-number">04</span>
+            <div class="question-content">
+              <h3>What parts of a Chrome Extension can realistically be reused in a React Native application?</h3>
+              <p class="line-highlight">
+                <strong>
+                  Reuse the platform-agnostic TypeScript core: field mapping, JSON structures, question-answer matching, API integrations,
+                  validation helpers, and site rules. Rewrite the browser-specific layer: content-script lifecycle, extension messaging,
+                  storage, permissions, DOM execution timing, file upload handling, and WebView-specific fallbacks.
+                </strong>
+              </p>
+            </div>
+          </article>
+
+          <article class="question-card">
+            <span class="question-number">05</span>
+            <div class="question-content">
+              <h3>Please share links to similar projects you have completed</h3>
+              <div class="proof-links" aria-label="Relevant work links">
+                <a href="https://github.com/devanshujain95" target="_blank" rel="noreferrer">
+                  <strong>GitHub</strong>
+                  <span>devanshujain95</span>
+                </a>
+                <a href="https://play.google.com/store/apps/details?id=com.qewd" target="_blank" rel="noreferrer">
+                  <strong>QEWD</strong>
+                  <span>React Native app</span>
+                </a>
+                <a href="https://apps.apple.com/us/app/lyra-music-radio-esound/id6747066887" target="_blank" rel="noreferrer">
+                  <strong>Lyra</strong>
+                  <span>iOS app</span>
+                </a>
+                <a href="https://apps.apple.com/us/app/cleanmind-voice-diary/id6758046617" target="_blank" rel="noreferrer">
+                  <strong>Clean Mind</strong>
+                  <span>iOS voice app</span>
+                </a>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section reuse-section" id="reuse-strategy" aria-labelledby="reuse-title">
+        <div class="section-heading">
+          <p class="eyebrow">Chrome Extension to mobile</p>
+          <h2 id="reuse-title">Reuse strategy</h2>
+          <p>
+            The goal is not to copy a Chrome Extension directly into mobile. The right approach is to preserve the reusable automation core
+            and rebuild the platform execution layer for Android and iOS.
+          </p>
+        </div>
+
+        <div class="strategy-grid">
+          <article class="strategy-card">
+            <h3>Reuse directly</h3>
+            <ul>
+              <li>TypeScript utility functions</li>
+              <li>Business rules and job-board metadata</li>
+              <li>Field mapping and question-answer matching</li>
+              <li>Existing JSON structures and backend API clients</li>
+              <li>Validation helpers and normalized automation outputs</li>
+            </ul>
+          </article>
+
+          <article class="strategy-card">
+            <h3>Adapt for mobile</h3>
+            <ul>
+              <li>DOM parsing timing inside React Native WebView</li>
+              <li>Bridge messaging between page JavaScript and app state</li>
+              <li>Resume upload and native file permissions</li>
+              <li>Manual fallback states for unsupported fields</li>
+              <li>Android and iOS differences in WebView behavior</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
       <section class="section capabilities-section" id="capabilities" aria-labelledby="capabilities-title">
         <div class="section-heading">
-          <p class="eyebrow">POC flow</p>
-          <h2 id="capabilities-title">What the demo proves</h2>
+          <p class="eyebrow">Project fit</p>
+          <h2 id="capabilities-title">How this maps to the job</h2>
           <p>
-            The page stays intentionally lightweight: it highlights only the core proof points from the OptimHire mobile prototype.
+            The current POC is intentionally focused on the hardest mobile automation surface: dynamic forms inside a live WebView.
           </p>
         </div>
 
@@ -135,39 +259,72 @@
           <article class="capability-card">
             <span class="capability-number">01</span>
             <div>
-              <h3>Live iOS WebView control</h3>
-              <p>The app loads a real job posting and controls the application journey inside a native mobile WebView.</p>
+              <h3>React Native WebView integration</h3>
+              <p>Loads real job application pages and uses a controlled JavaScript bridge for scan and autofill commands.</p>
             </div>
           </article>
           <article class="capability-card">
             <span class="capability-number">02</span>
             <div>
-              <h3>Dynamic DOM field detection</h3>
-              <p>Form inputs are scanned from the page instead of relying on a fixed ATS-specific template.</p>
+              <h3>Dynamic form handling</h3>
+              <p>Handles text fields, textareas, hidden fields, screening questions, skipped fields, and manual review states.</p>
             </div>
           </article>
           <article class="capability-card">
             <span class="capability-number">03</span>
             <div>
-              <h3>Profile-to-field mapping</h3>
-              <p>Candidate profile values are mapped into recognized form fields with skipped/manual states kept visible.</p>
+              <h3>Profile and answer matching</h3>
+              <p>Maps candidate profile data and static answers into detected form fields while keeping uncertainty visible.</p>
             </div>
           </article>
           <article class="capability-card">
             <span class="capability-number">04</span>
             <div>
-              <h3>Safe review handoff</h3>
-              <p>The user stays in control before final submission, with the app preparing the form for review instead of blindly applying.</p>
+              <h3>Safe automation architecture</h3>
+              <p>Prepares applications for user review, avoids blind final submission, and leaves room for site-specific adapters.</p>
             </div>
           </article>
         </div>
+      </section>
+
+      <section class="section roadmap-section" id="roadmap" aria-labelledby="roadmap-title">
+        <div class="section-heading">
+          <p class="eyebrow">Implementation roadmap</p>
+          <h2 id="roadmap-title">How I would take this from POC to production</h2>
+        </div>
+
+        <ol class="timeline-list">
+          <li>
+            <strong>Audit the Plasmo Chrome Extension</strong>
+            <span>Review the 22-site extension, separate reusable TypeScript logic from browser-only APIs, and document mobile limitations.</span>
+          </li>
+          <li>
+            <strong>Create a shared automation core</strong>
+            <span>Move field mapping, question matching, JSON models, API clients, and site rules into a mobile-safe shared package.</span>
+          </li>
+          <li>
+            <strong>Build the React Native WebView layer</strong>
+            <span>Implement scan, classify, fill, skip, focus, reset, and review commands through a reliable WebView bridge.</span>
+          </li>
+          <li>
+            <strong>Integrate profile, resume, and backend APIs</strong>
+            <span>Connect authentication, user profile data, resume handling, existing APIs, and normalized application workflow state.</span>
+          </li>
+          <li>
+            <strong>Scale across job boards with QA</strong>
+            <span>Add site adapters incrementally, test field types and edge cases, and ship Android/iOS builds with deployment documentation.</span>
+          </li>
+        </ol>
       </section>
 
       <section class="section contact-section" id="contact" aria-labelledby="contact-title">
         <div class="section-heading">
           <p class="eyebrow">Contact</p>
           <h2 id="contact-title">Connect with me</h2>
-          <p>Please let me know a good time to discuss the OptimHire POC, next production steps, and handoff details.</p>
+          <p>
+            I would be happy to discuss the Chrome Extension codebase, the mobile reuse strategy, Android/iOS implementation details, and
+            the next production milestones.
+          </p>
         </div>
 
         <div class="contact-card">
@@ -190,8 +347,8 @@
     <footer class="site-footer">
       <img src="assets/optimhire/icon.png" alt="OptimHire logo" />
       <div>
-        <strong>OptimHire Auto-Applier POC</strong>
-        <span>Product demo, technical walkthrough, and mobile automation proof points.</span>
+        <strong>OptimHire Job Auto Applier</strong>
+        <span>React Native WebView automation proposal, demo, reuse strategy, and roadmap.</span>
       </div>
     </footer>
 
