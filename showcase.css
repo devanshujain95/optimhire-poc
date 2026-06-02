@@ -510,7 +510,8 @@ h3 {
   margin-top: 14px;
 }
 
-.proof-links a {
+.proof-links a,
+.proof-item {
   min-height: 74px;
   display: flex;
   flex-direction: column;
@@ -529,13 +530,15 @@ h3 {
   outline: none;
 }
 
-.proof-links strong {
+.proof-links strong,
+.proof-item strong {
   font-size: 20px;
   line-height: 1;
   font-weight: 900;
 }
 
-.proof-links span {
+.proof-links span,
+.proof-item span {
   margin-top: 6px;
   color: var(--muted);
   font-size: 12px;
